@@ -19,10 +19,31 @@
     <h2><a href="introduction">Read This First</a></h2>
     <h2><a href="how-to-use">How to Use This Book</a></h2>
   <h1 id="modules">Modules</h1>
-    <h2><a href="module-01"><code>01</code>: Lettuce Salad</a></h2>
-    <h2>02: Coleslaw Salad</h2>
-    <h2>03: Japanese-style Salad</h2>
+    <h2>
+      <a href="module-01">
+        <code>01</code>: Lettuce Salad
+      </a>
+      <span id="module-01-progress" class="module-progress"></span>
+    </h2>
+    <h2><code>02</code>: Coleslaw Salad</h2>
+    <h2><code>03</code>: Japanese-style Salad</h2>
 </main>
-
+<script type="module">
+  import { todoItems, todoIdentifierFrom } from "/js/todo-items.js";
+  const backEvent = (navigator.userAgent.match('iPhone') != null) ? 'popstate' : 'pageshow';
+  window.addEventListener(backEvent, (event) => {
+    const module01TodoItems = todoItems.filter(function(todoItem) {
+      return todoItem["module-id"] === "01";
+    });
+    const module01TodoItemsComplete = module01TodoItems.filter(function(todoItem) {
+      const todoIdentifier = todoIdentifierFrom(todoItem);
+      const savedValue = localStorage.getItem(todoIdentifier);
+      return savedValue === 'true'
+    });
+    const module01Progress = String(module01TodoItemsComplete.length) + " of " + String(module01TodoItems.length) + " tasks";
+    let module01ProgressElement = document.getElementById("module-01-progress");
+    module01ProgressElement.innerHTML = module01Progress;
+  });
+</script>
 </body>
 </html>

@@ -56,5 +56,61 @@
   });
 })();
 </script>
+<script type="module">
+import { todoItems, todoIdentifierFrom } from "/js/todo-items.js";
+;(function() {
+  // HACK: Only enable the checklist for Module 01
+  if (document.title !== "Module 01") {
+    return;
+  }
+
+  const todoIdentifiers = todoItems.map(function(i) {
+    return i["module-id"] + "-" + i["id"];
+  });
+
+  let checklist = document.getElementById('checklist');
+  let checklistTitle = document.getElementById('checklist-title');
+  let checklistItemTemplate = document.getElementById('checklist-item-template');
+
+  checklist.removeAttribute("hidden");
+  checklistTitle.removeAttribute("hidden");
+
+  todoItems.forEach(function(todoItem) {
+    const todoIdentifier = todoIdentifierFrom(todoItem);
+    const todoName = todoItem["name"];
+    let newChecklistItem = checklistItemTemplate.cloneNode(true);
+    newChecklistItem.setAttribute("id", "checklist-item-" + todoIdentifier);
+    newChecklistItem.removeAttribute("hidden");
+    let newChecklistItemInput = newChecklistItem.querySelector("input");
+    const newChecklistItemInputID = "checklist-item-input-" + todoIdentifier
+    newChecklistItemInput.setAttribute("id", newChecklistItemInputID);
+    newChecklistItemInput.setAttribute("name", todoIdentifier);
+    let newChecklistItemLabel = newChecklistItem.querySelector("label");
+    newChecklistItemLabel.setAttribute("for", newChecklistItemInputID);
+    newChecklistItemLabel.innerHTML = todoName;
+
+    // check the local storage for the saved value
+    const savedValue = localStorage.getItem(todoIdentifier);
+
+    // if a saved value exists, update the checkbox state
+    if (savedValue !== null) {
+      newChecklistItemInput.checked = (savedValue === 'true');
+    } else {
+      newChecklistItemInput.checked = false;
+    }
+
+    // add an event listener to the checkbox element
+    newChecklistItemInput.addEventListener('change', function() {
+      // get the current state of the checkbox
+      const isChecked = newChecklistItemInput.checked.toString();
+
+      // save the current state to local storage
+      localStorage.setItem(todoIdentifier, isChecked);
+    });
+
+    checklist.appendChild(newChecklistItem);
+  });
+})();
+</script>
 </body>
 </html>

@@ -18,8 +18,8 @@
 </header>
 
 <nav id="TOC" role="doc-toc">
-    <strong>Contents</strong><label for="contents">⊕</label>
-  <input type="checkbox" id="contents">
+    <strong>Contents</strong><label for="contents" class="toc-toggle-label">⊕</label>
+  <input type="checkbox" id="contents" class="toc-toggle-input" checked>
   <ul>
   <li><a href="#introduction" id="toc-introduction">Introduction</a></li>
   <li><a href="#tools" id="toc-tools">Tools</a></li>
@@ -34,12 +34,17 @@
   <li><a href="#why-did-i-fail" id="toc-why-did-i-fail">Why did I fail?</a></li>
   <li><a href="#when-have-i-completed-module-01" id="toc-when-have-i-completed-module-01">When have I completed module 01?</a></li>
   </ul>
+  <br/>
+  <strong id="checklist-title" hidden>Checklist</strong>
+  <ul id="checklist" hidden>
+    <li id="checklist-item-template" class="checklist-item" hidden>
+        <input type="checkbox" id="checklist-item-input-example" name="example" />
+        <label for="example">Example</label>
+    </li>
+  </ul>
 </nav>
 
 <main>
-<nav>
-<input type="checkbox" id="myCheckbox">
-</nav>
 <div class="note blue">
 <table>
 <tbody>
@@ -402,10 +407,10 @@ kore, doko ni arimasuka?</p>
 </ul></li>
 </ul>
 <h1 id="when-have-i-completed-module-01">When have I completed module 01?</h1>
-<ul class="task-list">
-<li><input type="checkbox" />You should be comfortable preparing two or more different types of lettuce <em>and</em> the template dressing without referencing the template.</li>
-<li><input type="checkbox" />You should have a rough understanding of how different vinegar and olive oil ratios taste.</li>
-<li><input type="checkbox" />You should know how to “fix” a dressing that’s too bitter.</li>
+<ul>
+<li><strong>Challenge 01</strong>: You should be comfortable preparing two or more different types of lettuce <em>and</em> the template dressing without referencing the template.</li>
+<li><strong>Challenge 02</strong>: You should have a rough understanding of how different vinegar and olive oil ratios taste.</li>
+<li><strong>Challenge 03</strong>: You should know how to “fix” a dressing that’s too bitter.</li>
 </ul>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr />
@@ -426,6 +431,62 @@ kore, doko ni arimasuka?</p>
     var wasChecked = checkbox.checked;
     checkbox.disabled = false;
     checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+  });
+})();
+</script>
+<script type="module">
+import { todoItems, todoIdentifierFrom } from "/js/todo-items.js";
+;(function() {
+  // HACK: Only enable the checklist for Module 01
+  if (document.title !== "Module 01") {
+    return;
+  }
+
+  const todoIdentifiers = todoItems.map(function(i) {
+    return i["module-id"] + "-" + i["id"];
+  });
+
+  let checklist = document.getElementById('checklist');
+  let checklistTitle = document.getElementById('checklist-title');
+  let checklistItemTemplate = document.getElementById('checklist-item-template');
+
+  checklist.removeAttribute("hidden");
+  checklistTitle.removeAttribute("hidden");
+
+  todoItems.forEach(function(todoItem) {
+    const todoIdentifier = todoIdentifierFrom(todoItem);
+    const todoName = todoItem["name"];
+    let newChecklistItem = checklistItemTemplate.cloneNode(true);
+    newChecklistItem.setAttribute("id", "checklist-item-" + todoIdentifier);
+    newChecklistItem.removeAttribute("hidden");
+    let newChecklistItemInput = newChecklistItem.querySelector("input");
+    const newChecklistItemInputID = "checklist-item-input-" + todoIdentifier
+    newChecklistItemInput.setAttribute("id", newChecklistItemInputID);
+    newChecklistItemInput.setAttribute("name", todoIdentifier);
+    let newChecklistItemLabel = newChecklistItem.querySelector("label");
+    newChecklistItemLabel.setAttribute("for", newChecklistItemInputID);
+    newChecklistItemLabel.innerHTML = todoName;
+
+    // check the local storage for the saved value
+    const savedValue = localStorage.getItem(todoIdentifier);
+
+    // if a saved value exists, update the checkbox state
+    if (savedValue !== null) {
+      newChecklistItemInput.checked = (savedValue === 'true');
+    } else {
+      newChecklistItemInput.checked = false;
+    }
+
+    // add an event listener to the checkbox element
+    newChecklistItemInput.addEventListener('change', function() {
+      // get the current state of the checkbox
+      const isChecked = newChecklistItemInput.checked.toString();
+
+      // save the current state to local storage
+      localStorage.setItem(todoIdentifier, isChecked);
+    });
+
+    checklist.appendChild(newChecklistItem);
   });
 })();
 </script>

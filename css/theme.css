@@ -72,6 +72,9 @@
   --h2-margin-top: 18px;
   --h2-margin-bottom: 6px;
 
+  --h2-module-progress-font-size: 15px;
+  --h2-module-progress-margin-left: 4px;
+
   --ul-indent-size: 23px;
   --ol-indent-size: 19px;
   --ol-li-padding-left: 4px;
@@ -225,7 +228,7 @@ main {
   position: relative;
 }
 
-nav#TOC label,
+nav#TOC label.toc-toggle-label,
 label.margin-toggle:not(.sidenote-number),
 .sidenote-number:after,
 .sidenote:before,
@@ -337,6 +340,12 @@ h2 {
 
 h2 code {
   font-size: var(--h2-code-font-size);
+}
+
+h2 span.module-progress {
+  font-size: var(--h2-module-progress-font-size);
+  margin-left: var(--h2-module-progress-margin-left);
+  color: var(--color-text-secondary);
 }
 
 h3 {
@@ -813,11 +822,11 @@ nav#TOC {
   padding-left: 1.5rem;
 }
 
-nav#TOC input {
+nav#TOC input.toc-toggle-input {
   display: none;
 }
 
-nav#TOC label {
+nav#TOC label.toc-toggle-label {
   color: var(--color-link);
   cursor: pointer;
 }
@@ -826,7 +835,7 @@ nav#TOC > ul {
   display: none;
 }
 
-nav#TOC > input:checked + ul {
+nav#TOC > input:checked ~ ul {
   display: block;
 }
 
@@ -871,7 +880,7 @@ nav#TOC > input:checked + ul {
     overflow-y: auto;
   }
 
-  nav#TOC label {
+  nav#TOC label.toc-toggle-label {
     display: none;
   }
 
