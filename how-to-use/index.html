@@ -160,10 +160,6 @@ import { todoItems, todoIdentifierFrom } from "/js/todo-items.js";
     return;
   }
 
-  const todoIdentifiers = todoItems.map(function(i) {
-    return i["module-id"] + "-" + i["id"];
-  });
-
   let checklist = document.getElementById('checklist');
   let checklistTitle = document.getElementById('checklist-title');
   let checklistItemTemplate = document.getElementById('checklist-item-template');
