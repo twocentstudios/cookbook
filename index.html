@@ -41,7 +41,7 @@
       const savedValue = localStorage.getItem(todoIdentifier);
       return savedValue === 'true'
     });
-    const module01Progress = String(module01TodoItemsComplete.length) + " of " + String(module01TodoItems.length) + " tasks";
+    const module01Progress = String(module01TodoItemsComplete.length) + " of " + String(module01TodoItems.length) + " tasks complete";
     let module01ProgressElement = document.getElementById("module-01-progress");
     module01ProgressElement.innerHTML = module01Progress;
   });
