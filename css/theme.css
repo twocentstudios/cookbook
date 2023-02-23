@@ -4,7 +4,7 @@
 :root {
   /* --- Colors --- */
 
-  --background-color: #fff;
+  --background-color: #F7F7F7;
 
   --color-text: #1b2733;
   --color-text-secondary: #637282;
@@ -114,7 +114,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background-color: #161313;
+    --background-color: #1A1717;
 
     --color-text: #f7f5f2;
     --color-text-secondary: #9d9b99;
